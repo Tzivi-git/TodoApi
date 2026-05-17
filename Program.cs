@@ -28,6 +28,13 @@ builder.Services.AddSwaggerGen();
 // ---  - הופכים את ה-builder ל-app ---
 var app = builder.Build();
 
+// יצירה אוטומטית של ה-Database והטבלאות אם הם לא קיימים בענן
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
+    db.Database.EnsureCreated();
+}
+
 // --- שלב 2: הגדרת Middleware (אחרי ה-Build!) ---
 
 
