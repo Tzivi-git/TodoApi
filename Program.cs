@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // א. הגדרת ה-Database
 var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
 builder.Services.AddDbContext<ToDoDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
 
 // ב. הגדרת CORS - חייב להיות לפני ה-Build
 builder.Services.AddCors(options =>
@@ -29,11 +29,11 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // יצירה אוטומטית של ה-Database והטבלאות אם הם לא קיימים בענן
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
-    db.Database.EnsureCreated();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
+//     db.Database.EnsureCreated();
+// }
 
 // --- שלב 2: הגדרת Middleware (אחרי ה-Build!) ---
 
