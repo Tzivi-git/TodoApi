@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // א. הגדרת ה-Database
 // משיכת מחרוזת החיבור ממשתנה הסביבה הראשי של Render, או מהקונפיגורציה המקומית
-var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__ToDoDB") 
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION") 
                        ?? builder.Configuration.GetConnectionString("ToDoDB");
 // builder.Services.AddDbContext<ToDoDbContext>(options =>
 //     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
