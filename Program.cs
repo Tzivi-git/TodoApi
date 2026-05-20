@@ -7,15 +7,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 // א. הגדרת ה-Database
 // משיכת מחרוזת החיבור ממשתנה הסביבה הראשי של Render, או מהקונפיגורציה המקומית
-var connectionString = builder.Configuration["DB_CONNECTION"] 
-                       ?? Environment.GetEnvironmentVariable("DB_CONNECTION")
-                       ?? builder.Configuration.GetConnectionString("ToDoDB");
+// var connectionString = builder.Configuration["DB_CONNECTION"] 
+//                        ?? Environment.GetEnvironmentVariable("DB_CONNECTION")
+//                        ?? builder.Configuration.GetConnectionString("ToDoDB");
+// // builder.Services.AddDbContext<ToDoDbContext>(options =>
+// //     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
 // builder.Services.AddDbContext<ToDoDbContext>(options =>
-//     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
+//     options.UseMySql(connectionString, 
+//         new MySqlServerVersion(new Version(8, 0, 0)),
+//         mySqlOptions => mySqlOptions.EnableRetryOnFailure() // חסינות לשגיאות רשת זמניות
+//     ));
+// משיכת מחרוזת החיבור ישירות מתוך קובץ ה-appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
+
 builder.Services.AddDbContext<ToDoDbContext>(options =>
     options.UseMySql(connectionString, 
         new MySqlServerVersion(new Version(8, 0, 0)),
-        mySqlOptions => mySqlOptions.EnableRetryOnFailure() // חסינות לשגיאות רשת זמניות
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure() // הגנה מניתוקי רשת
     ));
 // ב. הגדרת CORS - חייב להיות לפני ה-Build
 builder.Services.AddCors(options =>
