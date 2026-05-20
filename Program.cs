@@ -6,10 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 // --- שלב 1: הגדרת Services (לפני ה-Build!) ---
 
 // א. הגדרת ה-Database
-var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
+// משיכת מחרוזת החיבור ממשתנה הסביבה הראשי של Render, או מהקונפיגורציה המקומית
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__ToDoDB") 
+                       ?? builder.Configuration.GetConnectionString("ToDoDB");
+// builder.Services.AddDbContext<ToDoDbContext>(options =>
+//     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
 builder.Services.AddDbContext<ToDoDbContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
-
+    options.UseMySql(connectionString, 
+        new MySqlServerVersion(new Version(8, 0, 0)),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure() // חסינות לשגיאות רשת זמניות
+    ));
 // ב. הגדרת CORS - חייב להיות לפני ה-Build
 builder.Services.AddCors(options =>
 {
