@@ -30,12 +30,9 @@ var app = builder.Build();
 
 // --- שלב 2: הגדרת Middleware (אחרי ה-Build!) ---
 
-
+app.UseCors("AllowAll");
 app.UseSwagger();
 app.UseSwaggerUI();
-
-
-app.UseCors("AllowAll");
 
 // --- שלב 3: מיפוי ה-Routes ---
 
