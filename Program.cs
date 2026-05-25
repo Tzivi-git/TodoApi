@@ -83,4 +83,7 @@ app.MapDelete("/items/{id}", async (ToDoDbContext db, int id) =>
     return Results.NoContent();
 });
 
-app.Run();
+// app.Run();
+// משיכת הפורט הדינמי ש-Render מקצה, ואם הוא לא קיים (בריצה מקומית) שימוש ב-5000
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+app.Run($"http://0.0.0.0:{port}");
